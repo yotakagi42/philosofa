@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:08:10 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/21 15:41:01 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:20:14 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,7 @@ static void	philo_init(t_table *table)
 		philo = table->philos + i;
 		philo->id = i + 1;
 		philo->full = false;
+		philo->meals_counter = 0;
 		philo->table = table;
 		safe_mutex_handle(&philo->philo_mutex, INIT);
 		assign_forks(philo, table->forks, i);

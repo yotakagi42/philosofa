@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:09:03 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/27 15:42:51 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/27 16:21:32 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	write_status(t_philo_status status, t_philo *philo, bool debug)
 	safe_mutex_handle(&philo->table->write_mutex, LOCK);
 	if (debug)
 		write_status_debug(status, philo, elapsed);
-	// write.c (修正例)
 	else
 	{
 		if ((TAKE_FIRST_FORK == status || TAKE_SECOND_FORK == status)
