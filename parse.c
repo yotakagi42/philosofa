@@ -33,9 +33,9 @@ static const char	*valid_input(const char *str, int *error)
 	if (*str == '+')
 		++str;
 	else if (*str == '-')
-		*error = print_error("positiv number only");
+		*error = print_error("positive number only");
 	if (!is_digit(*str))
-		*error = print_error("The input isnot correct");
+		*error = print_error("The input is not correct");
 	if (*error)
 		return (NULL);
 	number = str;
@@ -80,6 +80,6 @@ int	parse_input(t_table *table, char **av)
 		return (print_error("Wrong input: number_of_philosophers must be > 0"));
 	if (table->time_to_die < 6e4 || table->time_to_eat < 6e4
 		|| table->time_to_sleep < 6e4)
-		return (print_error("Use timetamps major than 60ms"));
+		return (print_error("Use timestamps bigger than 60ms"));
 	return (0);
 }

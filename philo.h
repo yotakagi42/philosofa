@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:09:24 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 17:08:39 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:42:25 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -118,3 +118,5 @@ void					increase_long(t_mtx *mutex, long *value);
 void					*monitor_dinner(void *data);
 void					clean(t_table *table);
 void					*lone_philo(void *arg);
+void					join_threads(t_table *table);
+int						create_threads(t_table *table);

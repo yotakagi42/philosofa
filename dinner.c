@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:07:59 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 17:08:57 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:29:08 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,7 @@ void	*dinner_simulation(void *data)
 	increase_long(&philo->table->table_mutex,
 		&philo->table->threads_running_nbr);
 	if (philo->id % 2 == 0)
-		usleep(15000);
+		usleep(philo->table->time_to_eat / 2);
 	while (!simulation_finished(philo->table))
 	{
 		if (philo->full)
@@ -54,7 +54,7 @@ void	*dinner_simulation(void *data)
 	return (NULL);
 }
 
-static int	create_threads(t_table *table)
+int	create_threads(t_table *table)
 {
 	int	i;
 
@@ -77,7 +77,7 @@ static int	create_threads(t_table *table)
 	return (0);
 }
 
-static void	join_threads(t_table *table)
+void	join_threads(t_table *table)
 {
 	int	i;
 

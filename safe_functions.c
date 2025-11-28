@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:08:41 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 16:45:20 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:44:30 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,10 @@ void	*safe_malloc(size_t bytes)
 
 	ret = malloc(bytes);
 	if (NULL == ret)
-		error_exit("Error with the malloc");
+	{
+		print_error("Error with the malloc");
+		return (NULL);
+	}
 	return (ret);
 }
 
