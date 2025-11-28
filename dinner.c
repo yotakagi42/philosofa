@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:07:59 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/27 17:05:15 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:08:57 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,37 +14,16 @@
 
 static void	thinking(t_philo *philo)
 {
-	write_status(THINKING, philo, DEBUG_MODE);
 	if (philo->table->philo_nbr % 2 != 0)
-	{
 		usleep(1000);
-	}
-}
-
-void	*lone_philo(void *arg)
-{
-	t_philo	*philo;
-
-	philo = (t_philo *)arg;
-	wait_all_threads(philo->table);
-	set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
-	increase_long(&philo->table->table_mutex,
-		&philo->table->threads_running_nbr);
-	write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
-	while (!simulation_finished(philo->table))
-		usleep(200);
-	return (NULL);
 }
 
 static void	eat(t_philo *philo)
 {
 	safe_mutex_handle(&philo->first_fork->fork, LOCK);
-	write_status(TAKE_FIRST_FORK, philo, DEBUG_MODE);
 	safe_mutex_handle(&philo->second_fork->fork, LOCK);
-	write_status(TAKE_SECOND_FORK, philo, DEBUG_MODE);
 	set_long(&philo->philo_mutex, &philo->last_meal_time, gettime(MILLISECOND));
 	philo->meals_counter++;
-	write_status(EATING, philo, DEBUG_MODE);
 	precise_usleep(philo->table->time_to_eat, philo->table);
 	if (philo->table->nbr_limit_meals > 0
 		&& philo->meals_counter == philo->table->nbr_limit_meals)
@@ -69,32 +48,39 @@ void	*dinner_simulation(void *data)
 		if (philo->full)
 			break ;
 		eat(philo);
-		write_status(SLEEPING, philo, DEBUG_MODE);
 		precise_usleep(philo->table->time_to_sleep, philo->table);
 		thinking(philo);
 	}
 	return (NULL);
 }
 
-void	dinner_start(t_table *table)
+static int	create_threads(t_table *table)
 {
 	int	i;
 
 	i = -1;
-	if (0 == table->nbr_limit_meals)
-		return ;
-	else if (1 == table->philo_nbr)
-		safe_thread_handle(&table->philos[0].thread_id, lone_philo,
-			&table->philos[0], CREATE);
+	if (table->philo_nbr == 1)
+	{
+		if (safe_thread_handle(&table->philos[0].thread_id, lone_philo,
+				&table->philos[0], CREATE) != 0)
+			return (1);
+	}
 	else
 	{
 		while (++i < table->philo_nbr)
-			safe_thread_handle(&table->philos[i].thread_id, dinner_simulation,
-				&table->philos[i], CREATE);
+			if (safe_thread_handle(&table->philos[i].thread_id,
+					dinner_simulation, &table->philos[i], CREATE) != 0)
+				return (1);
 	}
-	safe_thread_handle(&table->monitor, monitor_dinner, table, CREATE);
-	table->start_simulation = gettime(MILLISECOND);
-	set_bool(&table->table_mutex, &table->all_threads_ready, true);
+	if (safe_thread_handle(&table->monitor, monitor_dinner, table, CREATE) != 0)
+		return (1);
+	return (0);
+}
+
+static void	join_threads(t_table *table)
+{
+	int	i;
+
 	i = -1;
 	while (++i < table->philo_nbr)
 		safe_thread_handle(&table->philos[i].thread_id, NULL, NULL, JOIN);

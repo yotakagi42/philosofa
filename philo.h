@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:09:24 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/27 15:41:06 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:08:39 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,6 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <unistd.h>
-
-#define RST "\033[0m"
-#define RED "\033[1;31m"
-#define G "\033[1;32m"
-#define Y "\033[1;33m"
-#define B "\033[1;34m"
-#define A "\033[1;35m"
-#define C "\033[1;36m"
-#define W "\033[1;37m"
-
-#define DEBUG_MODE 0
 
 typedef enum e_status
 {
@@ -66,7 +55,6 @@ typedef struct s_table	t_table;
 typedef struct s_fork
 {
 	t_mtx				fork;
-	int					fork_id;
 }						t_fork;
 
 /*philo
@@ -107,13 +95,13 @@ typedef struct s_table
 	t_philo				*philos;
 }						t_table;
 
-void					error_exit(const char *error);
-void					parse_input(t_table *table, char **av);
+int						print_error(const char *error);
+int						parse_input(t_table *table, char **av);
 void					*safe_malloc(size_t bytes);
-void					safe_thread_handle(pthread_t *thread,
+int						safe_thread_handle(pthread_t *thread,
 							void *(*foo)(void *), void *data, t_opcode opcode);
-void					safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
-void					data_init(t_table *table);
+int						safe_mutex_handle(t_mtx *mutex, t_opcode opcode);
+int						data_init(t_table *table);
 void					set_bool(t_mtx *mutex, bool *dest, bool value);
 bool					get_bool(t_mtx *mutex, bool *value);
 void					set_long(t_mtx *mutex, long *dest, long value);
@@ -122,12 +110,11 @@ bool					simulation_finished(t_table *table);
 void					wait_all_threads(t_table *table);
 long					gettime(t_time_code time_code);
 void					precise_usleep(long usec, t_table *table);
-void					write_status(t_philo_status status, t_philo *philo,
-							bool debug);
-void					parse_input(t_table *table, char **av);
-void					dinner_start(t_table *table);
+void					write_status(t_philo_status status, t_philo *philo);
+int						dinner_start(t_table *table);
 bool					all_threads_running(t_mtx *mutex, long *threads,
 							long philo_nbr);
 void					increase_long(t_mtx *mutex, long *value);
 void					*monitor_dinner(void *data);
 void					clean(t_table *table);
+void					*lone_philo(void *arg);

@@ -6,26 +6,42 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:08:21 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/21 16:43:53 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/11/28 17:01:56 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "philo.h"
 
+int	dinner_start(t_table *table)
+{
+	if (0 == table->nbr_limit_meals)
+		return (0);
+	if (create_threads(table) != 0)
+		return (1);
+	table->start_simulation = gettime(MILLISECOND);
+	set_bool(&table->table_mutex, &table->all_threads_ready, true);
+	join_threads(table);
+	return (0);
+}
+
 int	main(int ac, char **av)
 {
 	t_table	table;
 
-	if (ac == 5 || ac == 6)
+	if (ac != 5 && ac != 6)
+		return (print_error("Wrong input \n"));
+	if (parse_input(&table, av) != 0)
+		return (1);
+	if (data_init(&table) != 0)
 	{
-		parse_input(&table, av);
-		data_init(&table);
-		dinner_start(&table);
 		clean(&table);
+		return (1);
 	}
-	else
+	if (dinner_start(&table) != 0)
 	{
-		error_exit("Wrong input \n");
+		clean(&table);
+		return (1);
 	}
+	clean(&table);
 	return (0);
 }
