@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:08:30 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 16:23:06 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:29:31 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,15 +67,21 @@ int	parse_input(t_table *table, char **av)
 
 	error = 0;
 	table->philo_nbr = ft_atol(av[1], &error);
-	table->time_to_die = ft_atol(av[2], &error) * 1e3;
-	table->time_to_eat = ft_atol(av[3], &error) * 1e3;
-	table->time_to_sleep = ft_atol(av[4], &error) * 1e3;
+	table->time_to_die = ft_atol(av[2], &error);
+	table->time_to_eat = ft_atol(av[3], &error);
+	table->time_to_sleep = ft_atol(av[4], &error);
 	if (av[5])
 		table->nbr_limit_meals = ft_atol(av[5], &error);
 	else
 		table->nbr_limit_meals = -1;
 	if (error)
 		return (1);
+	if (table->time_to_die > INT_MAX / 1000 || table->time_to_eat > INT_MAX
+		/ 1000 || table->time_to_sleep > INT_MAX / 1000)
+		return (print_error("The value is too big"));
+	table->time_to_die *= 1e3;
+	table->time_to_eat *= 1e3;
+	table->time_to_sleep *= 1e3;
 	if (table->philo_nbr <= 0)
 		return (print_error("Wrong input: number_of_philosophers must be > 0"));
 	if (table->time_to_die < 6e4 || table->time_to_eat < 6e4

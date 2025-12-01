@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:20:31 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 18:06:13 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:37:41 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,6 @@ void	*monitor_dinner(void *data)
 				write_status(DIED, table->philos + i);
 			}
 		}
-		usleep(1000);
 	}
 	return (NULL);
 }

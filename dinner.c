@@ -6,7 +6,7 @@
 /*   By: yotakagi <yotakagi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/11/21 15:07:59 by yotakagi          #+#    #+#             */
-/*   Updated: 2025/11/28 18:22:04 by yotakagi         ###   ########.fr       */
+/*   Updated: 2025/12/01 11:37:03 by yotakagi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,9 +47,9 @@ void	*dinner_simulation(void *data)
 		usleep(philo->table->time_to_eat / 2);
 	while (!simulation_finished(philo->table))
 	{
-		if (philo->full)
-			break ;
 		eat(philo);
+		if (simulation_finished(philo->table))
+			break ;
 		write_status(SLEEPING, philo);
 		precise_usleep(philo->table->time_to_sleep, philo->table);
 		write_status(THINKING, philo);
