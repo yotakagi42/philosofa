@@ -94,7 +94,7 @@ graph TD
     Init --> P2[Philo 2 Thread]
     Init --> P3[Philo 3 ... Thread]
     
-    subgraph SharedMemory ["Shared Memory (Heap / Mutexes)"]
+    subgraph SharedMemory ["Shared Memory (Mutexes)"]
         Forks["Forks (Mutex array)"]
         Data["Shared Data (End Simulation Flag)"]
         Print["Write Mutex"]
