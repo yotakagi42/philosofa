@@ -184,7 +184,4 @@ philo/
 
 ## Authors
 
-* **[yotakagi]** - *Implementation* - [Profile](https://github.com/[your-username])
-
----
-<p align="center">Made with ❤️ at 42Tokyo</p>
+* **[yotakagi]** - *Implementation* - [Profile](https://github.com/yotakagi42)
