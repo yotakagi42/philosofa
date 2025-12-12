@@ -62,7 +62,7 @@ Unixのスレッド (`pthread`) とミューテックス (`mutex`) を使用し�
 
 各哲学者は以下のループを繰り返します。
 
-mermaid
+```mermaid
 stateDiagram-v2
     [*] --> Thinking
     Thinking --> TakeFork1: Is Hungry
@@ -73,6 +73,7 @@ stateDiagram-v2
     
     state "Eating (Time to eat)" as Eating
     state "Sleeping (Time to sleep)" as Sleeping
+```
 
 ### 2. デッドロック回避の仕組み (Deadlock Prevention)
 
@@ -85,7 +86,7 @@ stateDiagram-v2
 
 ### 3. スレッド構成 (Thread Structure)
 
-mermaid
+```mermaid
 graph TD
     Main[Main Process] --> Init[Initialization]
     Init --> Monitor[Monitor Thread]
@@ -104,5 +105,86 @@ graph TD
     Monitor -.->|Read Only / Check Death| P1
     Monitor -.->|Read Only / Check Death| P2
     P1 -->|Log Status| Print
+```
 
+## Getting Started
+
+### Prerequisites
+
+* GCC or Clang
+* Make
+* Pthread library
+
+### Installation
+
+1.  リポジトリをクローンします。
+    ```sh
+    git clone [https://github.com/](https://github.com/)[your-username]/philosophers.git
+    ```
+2.  ディレクトリに移動します。
+    ```sh
+    cd philosophers/philo
+    ```
+3.  コンパイルします。
+    ```sh
+    make
+    ```
+
+## Usage
+
+生成された `philo` 実行ファイルに引数を渡して実行します。
+
+```bash
+./philo [number_of_philosophers] [time_to_die] [time_to_eat] [time_to_sleep] [number_of_times_each_philosopher_must_eat]
+```
+
+* `number_of_philosophers`: 哲学者の数（=フォークの数）
+* `time_to_die`: 最後の食事からこの時間（ミリ秒）経過すると死亡する
+* `time_to_eat`: 食事にかかる時間（ミリ秒）
+* `time_to_sleep`: 睡眠にかかる時間（ミリ秒）
+* `[number_of_times...]`: (オプション) 各哲学者が最低何回食事をすればシミュレーションを終了するか
+
+### Execution Examples
+
+**基本動作（無限に続く）:**
+```bash
+./philo 5 800 200 200
+```
+* 5人の哲学者が、死ぬまでの猶予800ms、食事200ms、睡眠200msで生活します。誰も死なずにシミュレーションが続きます。
+
+**死ぬパターン:**
+```bash
+./philo 1 800 200 200
+```
+* 1人の哲学者はフォークを2本持てないため、800ms後に死亡します。
+
+**食事回数指定:**
+```bash
+./philo 5 800 200 200 7
+```
+* 全員が7回食事を完了するとシミュレーションが終了します。
+
+## Project Structure
+
+```text
+philo/
+├── Makefile           # ビルド設定
+├── philo.h            # ヘッダーファイル（構造体定義など）
+├── main.c             # エントリーポイント
+├── init.c             # メモリ確保、スレッド・Mutex初期化
+├── parse.c            # 引数のパースとエラーチェック
+├── dinner.c           # 哲学者のメインルーチン (eat, sleep, think)
+├── monitor.c          # 監視スレッド (death check)
+├── safe_functions.c   # pthread/mutex関数のラッパー (エラー処理付き)
+├── utils.c            # 時間取得 (gettime) などのユーティリティ
+├── synchro_utils.c    # スレッド同期用ヘルパー
+├── getter_setter.c    # Thread-safeな変数の読み書き
+└── write.c            # ログ出力 (Mutex保護付き)
+```
+
+## Authors
+
+* **[yotakagi]** - *Implementation* - [Profile](https://github.com/[your-username])
+
+---
 <p align="center">Made with ❤️ at 42Tokyo</p>
